@@ -1,0 +1,250 @@
+{
+  "city": "Sangli-Miraj-Kupwad, Maharashtra",
+  "areas": {
+    "Vishrambag": {
+      "weight": 3,
+      "roads": [
+        "Sangli-Miraj Road",
+        "Kupwad Road",
+        "MSEB Road",
+        "Ganpati Mandir Road"
+      ],
+      "chowks": [],
+      "landmarks": [
+        "Walchand College of Engineering",
+        "Willingdon College",
+        "Vishrambag Railway Station",
+        "Vishrambag flyover"
+      ],
+      "subareas": [
+        "Gandhi Nagar",
+        "Siddhivinayak Nagar",
+        "Savarkar Colony",
+        "Sahyadri Nagar",
+        "Neminathnagar",
+        "Chanakyapuri",
+        "Viya Nagar",
+        "Gayatri Nagar",
+        "Silver Oak Park"
+      ]
+    },
+    "Ganapati Peth": {
+      "weight": 3,
+      "roads": [
+        "Main Road",
+        "Theatre Road"
+      ],
+      "chowks": [
+        "Patel Chowk",
+        "Jhansi Chowk",
+        "Tanaji Chowk"
+      ],
+      "landmarks": [
+        "Sangli Ganpati Mandir",
+        "Krishna Ghat"
+      ],
+      "subareas": [
+        "Kapad Peth",
+        "Teli Galli",
+        "Pethbagh"
+      ]
+    },
+    "Khanbhag": {
+      "weight": 3,
+      "roads": [
+        "Station Road",
+        "Panchamukhi Maruti Road",
+        "Old Station Road",
+        "District Hospital Road"
+      ],
+      "chowks": [
+        "Station Chowk",
+        "Civil Hospital Chowk",
+        "Azad Chowk",
+        "Karmaveer Bhaurao Chowk"
+      ],
+      "landmarks": [
+        "Sangli Fort",
+        "Sangli Civil Hospital",
+        "Sangli bus stand"
+      ],
+      "subareas": [
+        "Kothavale Galli",
+        "South Shivaji Nagar"
+      ]
+    },
+    "Gaon Bhag": {
+      "weight": 2,
+      "roads": [
+        "Maruti Road",
+        "Harbhat Road",
+        "Datta Maruti Road"
+      ],
+      "chowks": [
+        "Tilak Chowk",
+        "Shastri Chowk"
+      ],
+      "landmarks": [
+        "Maruti Mandir"
+      ],
+      "subareas": []
+    },
+    "Market Yard": {
+      "weight": 2,
+      "roads": [
+        "Vasant Park Road"
+      ],
+      "chowks": [],
+      "landmarks": [
+        "Sangli Railway Station"
+      ],
+      "subareas": [
+        "Vasant Colony",
+        "Ram Nagar"
+      ]
+    },
+    "Madhavnagar": {
+      "weight": 2,
+      "roads": [
+        "Madhavnagar Road",
+        "Sangli-Tasgaon Road",
+        "Main Road"
+      ],
+      "chowks": [
+        "Kandil Chowk",
+        "Ranapratap Chowk"
+      ],
+      "landmarks": [
+        "Vasantdada Industrial Estate"
+      ],
+      "subareas": [
+        "Somwar Peth",
+        "Budhwar Peth",
+        "Shaniwar Peth",
+        "Raviwar Peth"
+      ]
+    },
+    "Patrakar Nagar": {
+      "weight": 1,
+      "roads": [
+        "District Hospital Road"
+      ],
+      "chowks": [
+        "Pushparaj Chowk",
+        "Garpir Chowk"
+      ],
+      "landmarks": [],
+      "subareas": [
+        "Ganesh Nagar",
+        "Indira Nagar"
+      ]
+    },
+    "Abhay Nagar": {
+      "weight": 1,
+      "roads": [
+        "Vitthal Mandir Road"
+      ],
+      "chowks": [],
+      "landmarks": [
+        "Vitthal Mandir"
+      ],
+      "subareas": [
+        "Arwade Park",
+        "Kala Nagar"
+      ]
+    },
+    "Kupwad": {
+      "weight": 2,
+      "roads": [
+        "Kupwad Road",
+        "Old Kupwad Road"
+      ],
+      "chowks": [],
+      "landmarks": [
+        "Kupwad MIDC",
+        "ESIS Hospital Kupwad"
+      ],
+      "subareas": [
+        "Shinde Mala"
+      ]
+    },
+    "Miraj": {
+      "weight": 3,
+      "roads": [
+        "Miraj Road",
+        "Dhamani Road",
+        "100 Feet Road"
+      ],
+      "chowks": [
+        "Shivneri Chowk"
+      ],
+      "landmarks": [
+        "Miraj Junction",
+        "Government Medical College Miraj",
+        "Wanless Hospital",
+        "Mission Hospital Miraj",
+        "Miraj Dargah",
+        "Miraj Market"
+      ],
+      "subareas": [
+        "Brahmanpuri",
+        "Jawala Nagar",
+        "Vijaynagar"
+      ]
+    },
+    "Haripur": {
+      "weight": 1,
+      "roads": [],
+      "chowks": [],
+      "landmarks": [
+        "Irwin Bridge",
+        "Sangameshwar Temple",
+        "Krishna river bank"
+      ],
+      "subareas": []
+    },
+    "Ankali": {
+      "weight": 1,
+      "roads": [
+        "Ankali Road"
+      ],
+      "chowks": [],
+      "landmarks": [
+        "Ankali Bridge"
+      ],
+      "subareas": []
+    },
+    "Budhgaon": {
+      "weight": 1,
+      "roads": [
+        "Old Budhgaon Road"
+      ],
+      "chowks": [],
+      "landmarks": [],
+      "subareas": []
+    },
+    "Bamnoli": {
+      "weight": 1,
+      "roads": [],
+      "chowks": [],
+      "landmarks": [],
+      "subareas": []
+    }
+  },
+  "highways": [
+    "Kolhapur-Sangli Highway",
+    "Sangli-Ashta Road",
+    "Sangli-Tasgaon Road"
+  ],
+  "generic_spots": [
+    "the main bus stop",
+    "the petrol pump",
+    "the water tank",
+    "the school ground",
+    "the temple",
+    "the sugarcane field",
+    "the vegetable market",
+    "the cinema hall"
+  ],
+  "note": "Place names compiled from public web sources (pincode lists, address directories, Wikipedia, travel guides). Anchor-to-area pairings follow addresses seen in directories; this is not a surveyed map."
+}
