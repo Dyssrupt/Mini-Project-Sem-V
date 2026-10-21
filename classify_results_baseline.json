@@ -1,0 +1,586 @@
+{
+  "type": {
+    "model": "tfidf+LogReg",
+    "C": 3,
+    "val clean": {
+      "n": 600,
+      "n_scenarios": 48,
+      "accuracy": 0.9733,
+      "accuracy_ci95": [
+        0.9486,
+        0.9914
+      ],
+      "macro_f1": 0.9733,
+      "per_class": {
+        "fire": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "n": 150
+        },
+        "medical": {
+          "precision": 0.9797,
+          "recall": 0.9667,
+          "f1": 0.9732,
+          "n": 150
+        },
+        "accident": {
+          "precision": 0.9487,
+          "recall": 0.9867,
+          "f1": 0.9673,
+          "n": 150
+        },
+        "crime": {
+          "precision": 0.9658,
+          "recall": 0.94,
+          "f1": 0.9527,
+          "n": 150
+        }
+      },
+      "labels": [
+        "fire",
+        "medical",
+        "accident",
+        "crime"
+      ],
+      "confusion": [
+        [
+          150,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          145,
+          1,
+          4
+        ],
+        [
+          0,
+          1,
+          148,
+          1
+        ],
+        [
+          0,
+          2,
+          7,
+          141
+        ]
+      ]
+    },
+    "val asr-noisy": {
+      "n": 600,
+      "n_scenarios": 48,
+      "accuracy": 0.9733,
+      "accuracy_ci95": [
+        0.9484,
+        0.9918
+      ],
+      "macro_f1": 0.9733,
+      "per_class": {
+        "fire": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "n": 150
+        },
+        "medical": {
+          "precision": 0.9864,
+          "recall": 0.9667,
+          "f1": 0.9764,
+          "n": 150
+        },
+        "accident": {
+          "precision": 0.9427,
+          "recall": 0.9867,
+          "f1": 0.9642,
+          "n": 150
+        },
+        "crime": {
+          "precision": 0.9658,
+          "recall": 0.94,
+          "f1": 0.9527,
+          "n": 150
+        }
+      },
+      "labels": [
+        "fire",
+        "medical",
+        "accident",
+        "crime"
+      ],
+      "confusion": [
+        [
+          150,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          145,
+          1,
+          4
+        ],
+        [
+          0,
+          1,
+          148,
+          1
+        ],
+        [
+          0,
+          1,
+          8,
+          141
+        ]
+      ]
+    },
+    "test clean": {
+      "n": 600,
+      "n_scenarios": 48,
+      "accuracy": 0.97,
+      "accuracy_ci95": [
+        0.9363,
+        0.9967
+      ],
+      "macro_f1": 0.9696,
+      "per_class": {
+        "fire": {
+          "precision": 0.9934,
+          "recall": 1.0,
+          "f1": 0.9967,
+          "n": 150
+        },
+        "medical": {
+          "precision": 0.9146,
+          "recall": 1.0,
+          "f1": 0.9554,
+          "n": 150
+        },
+        "accident": {
+          "precision": 0.9804,
+          "recall": 1.0,
+          "f1": 0.9901,
+          "n": 150
+        },
+        "crime": {
+          "precision": 1.0,
+          "recall": 0.88,
+          "f1": 0.9362,
+          "n": 150
+        }
+      },
+      "labels": [
+        "fire",
+        "medical",
+        "accident",
+        "crime"
+      ],
+      "confusion": [
+        [
+          150,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          150,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          150,
+          0
+        ],
+        [
+          1,
+          14,
+          3,
+          132
+        ]
+      ]
+    },
+    "test asr-noisy": {
+      "n": 600,
+      "n_scenarios": 48,
+      "accuracy": 0.9683,
+      "accuracy_ci95": [
+        0.9339,
+        0.9967
+      ],
+      "macro_f1": 0.9678,
+      "per_class": {
+        "fire": {
+          "precision": 0.9934,
+          "recall": 1.0,
+          "f1": 0.9967,
+          "n": 150
+        },
+        "medical": {
+          "precision": 0.9146,
+          "recall": 1.0,
+          "f1": 0.9554,
+          "n": 150
+        },
+        "accident": {
+          "precision": 0.974,
+          "recall": 1.0,
+          "f1": 0.9868,
+          "n": 150
+        },
+        "crime": {
+          "precision": 1.0,
+          "recall": 0.8733,
+          "f1": 0.9324,
+          "n": 150
+        }
+      },
+      "labels": [
+        "fire",
+        "medical",
+        "accident",
+        "crime"
+      ],
+      "confusion": [
+        [
+          150,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          150,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          150,
+          0
+        ],
+        [
+          1,
+          14,
+          4,
+          131
+        ]
+      ]
+    }
+  },
+  "urgency": {
+    "model": "tfidf+LogReg",
+    "C": 1,
+    "val clean": {
+      "n": 600,
+      "n_scenarios": 48,
+      "accuracy": 0.52,
+      "accuracy_ci95": [
+        0.4003,
+        0.6357
+      ],
+      "macro_f1": 0.5088,
+      "per_class": {
+        "low": {
+          "precision": 0.4744,
+          "recall": 0.4022,
+          "f1": 0.4353,
+          "n": 92
+        },
+        "medium": {
+          "precision": 0.5211,
+          "recall": 0.5211,
+          "f1": 0.5211,
+          "n": 213
+        },
+        "high": {
+          "precision": 0.498,
+          "recall": 0.6048,
+          "f1": 0.5462,
+          "n": 210
+        },
+        "critical": {
+          "precision": 0.6852,
+          "recall": 0.4353,
+          "f1": 0.5324,
+          "n": 85
+        }
+      },
+      "labels": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "confusion": [
+        [
+          37,
+          48,
+          7,
+          0
+        ],
+        [
+          23,
+          111,
+          78,
+          1
+        ],
+        [
+          15,
+          52,
+          127,
+          16
+        ],
+        [
+          3,
+          2,
+          43,
+          37
+        ]
+      ],
+      "within_one": 0.9533,
+      "mae_levels": 0.532,
+      "under_triage": 0.2441,
+      "under_triage_ci95": [
+        0.0944,
+        0.4086
+      ],
+      "over_triage": 0.282
+    },
+    "val asr-noisy": {
+      "n": 600,
+      "n_scenarios": 48,
+      "accuracy": 0.52,
+      "accuracy_ci95": [
+        0.4046,
+        0.637
+      ],
+      "macro_f1": 0.5066,
+      "per_class": {
+        "low": {
+          "precision": 0.4684,
+          "recall": 0.4022,
+          "f1": 0.4327,
+          "n": 92
+        },
+        "medium": {
+          "precision": 0.5258,
+          "recall": 0.5258,
+          "f1": 0.5258,
+          "n": 213
+        },
+        "high": {
+          "precision": 0.498,
+          "recall": 0.6048,
+          "f1": 0.5462,
+          "n": 210
+        },
+        "critical": {
+          "precision": 0.6792,
+          "recall": 0.4235,
+          "f1": 0.5217,
+          "n": 85
+        }
+      },
+      "labels": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "confusion": [
+        [
+          37,
+          48,
+          7,
+          0
+        ],
+        [
+          23,
+          112,
+          77,
+          1
+        ],
+        [
+          16,
+          51,
+          127,
+          16
+        ],
+        [
+          3,
+          2,
+          44,
+          36
+        ]
+      ],
+      "within_one": 0.9517,
+      "mae_levels": 0.533,
+      "under_triage": 0.2441,
+      "under_triage_ci95": [
+        0.0928,
+        0.4079
+      ],
+      "over_triage": 0.2787
+    },
+    "test clean": {
+      "n": 600,
+      "n_scenarios": 48,
+      "accuracy": 0.635,
+      "accuracy_ci95": [
+        0.5034,
+        0.7601
+      ],
+      "macro_f1": 0.6414,
+      "per_class": {
+        "low": {
+          "precision": 0.6279,
+          "recall": 0.5745,
+          "f1": 0.6,
+          "n": 94
+        },
+        "medium": {
+          "precision": 0.6327,
+          "recall": 0.7045,
+          "f1": 0.6667,
+          "n": 220
+        },
+        "high": {
+          "precision": 0.5634,
+          "recall": 0.6122,
+          "f1": 0.5868,
+          "n": 196
+        },
+        "critical": {
+          "precision": 0.9286,
+          "recall": 0.5778,
+          "f1": 0.7123,
+          "n": 90
+        }
+      },
+      "labels": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "confusion": [
+        [
+          54,
+          24,
+          16,
+          0
+        ],
+        [
+          23,
+          155,
+          40,
+          2
+        ],
+        [
+          9,
+          65,
+          120,
+          2
+        ],
+        [
+          0,
+          1,
+          37,
+          52
+        ]
+      ],
+      "within_one": 0.9533,
+      "mae_levels": 0.412,
+      "under_triage": 0.2622,
+      "under_triage_ci95": [
+        0.0769,
+        0.4567
+      ],
+      "over_triage": 0.1847
+    },
+    "test asr-noisy": {
+      "n": 600,
+      "n_scenarios": 48,
+      "accuracy": 0.6383,
+      "accuracy_ci95": [
+        0.5063,
+        0.7623
+      ],
+      "macro_f1": 0.6475,
+      "per_class": {
+        "low": {
+          "precision": 0.6395,
+          "recall": 0.5851,
+          "f1": 0.6111,
+          "n": 94
+        },
+        "medium": {
+          "precision": 0.6316,
+          "recall": 0.7091,
+          "f1": 0.6681,
+          "n": 220
+        },
+        "high": {
+          "precision": 0.564,
+          "recall": 0.6071,
+          "f1": 0.5848,
+          "n": 196
+        },
+        "critical": {
+          "precision": 0.9464,
+          "recall": 0.5889,
+          "f1": 0.726,
+          "n": 90
+        }
+      },
+      "labels": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "confusion": [
+        [
+          55,
+          23,
+          16,
+          0
+        ],
+        [
+          22,
+          156,
+          40,
+          2
+        ],
+        [
+          9,
+          67,
+          119,
+          1
+        ],
+        [
+          0,
+          1,
+          36,
+          53
+        ]
+      ],
+      "within_one": 0.9533,
+      "mae_levels": 0.408,
+      "under_triage": 0.2692,
+      "under_triage_ci95": [
+        0.0808,
+        0.4682
+      ],
+      "over_triage": 0.1847
+    }
+  }
+}

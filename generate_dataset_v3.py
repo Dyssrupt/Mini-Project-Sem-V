@@ -17,6 +17,9 @@ Usage:  python3 generate_dataset_v3.py        -> writes ./output_v3/
 import csv, json, random, re
 from pathlib import Path
 from scenario_bank_v3 import SCENARIOS, OPENERS, NEUTRAL_EXTRAS, KIND_EXTRAS
+from scenario_bank_v3b import SCENARIOS_B
+for _t, _d in SCENARIOS_B.items():                       # scenarios 20-39 per (type, severity); 0-19 are the original bank
+    for _s, _l in _d.items(): SCENARIOS[_t][_s] = SCENARIOS[_t][_s] + _l
 
 HERE = Path(__file__).parent
 OUT_DIR = HERE / "output_v3"; OUT_DIR.mkdir(exist_ok=True)
@@ -95,9 +98,41 @@ SECONDARY = {  # primary -> [(secondary type, sentence)] ; only on moderate/seve
 }
 LABEL_MAP = {"KW": "EMERGENCY_KEYWORD", "VC": "VICTIM_COUNT"}
 MARK = re.compile(r"\[\[(\w+):(.*?)\]\]")
+KW_RE = None   # compiled after _kw_forms is defined (below)
+
+
+# ---------------------------------------------------------------- annotation guideline (v3.1)
+# EMERGENCY_KEYWORD: EVERY occurrence of a keyword form is labelled (longest form wins), not only the one the
+# scenario author marked. Forms = all [[KW:..]] in the bank/openers/secondary clauses. Words whose meaning depends
+# on context are NOT auto-labelled (they keep only the scenario author's label).
+# VICTIM_COUNT: number of people involved in the incident as the caller states it (victims, trapped people or
+# attackers: "three people", "both riders", "two men"). Bystander phrases ("A few people have gathered") are not labelled.
+CONTEXT_DEPENDENT = {"red", "fit", "force", "breathing", "broken"}
+
+
+def _kw_forms():
+    forms = set()
+    texts = [e for d in SCENARIOS.values() for l in d.values() for e in l] + \
+            [o for v in OPENERS.values() for o in v] + [t for v in SECONDARY.values() for _, t, _ in v]
+    for t in texts:
+        forms.update(m.group(2).lower() for m in MARK.finditer(t) if m.group(1) == "KW")
+    return sorted(forms - CONTEXT_DEPENDENT, key=lambda f: (-len(f), f))
+
+
+def harmonize(text, ents):
+    """Add-only consistency pass: label unlabelled occurrences of known keyword forms."""
+    taken = [(e["start"], e["end"]) for e in ents]; added = []
+    for m in KW_RE.finditer(text):
+        a, b = m.start(), m.end()
+        if all(b <= x or a >= y for x, y in taken):
+            taken.append((a, b)); added.append({"text": m.group(0), "label": "EMERGENCY_KEYWORD", "start": a, "end": b})
+    return sorted(ents + added, key=lambda e: e["start"])
 
 
 def cap_first(s): return s[:1].upper() + s[1:]
+
+
+KW_RE = re.compile(r"(?<![\w-])(?:" + "|".join(re.escape(f) for f in _kw_forms()) + r")(?![\w-])", re.I)
 
 
 def parse(entry):
@@ -131,7 +166,8 @@ class Builder:
         for m in MARK.finditer(tpl):
             plain = tpl[pos:m.start()]
             if plain: self.t(cap_first(plain) if (cap and first) else plain)
-            self.e(m.group(2), LABEL_MAP[m.group(1)]); first, pos = False, m.end()
+            ent = cap_first(m.group(2)) if (cap and first and not plain) else m.group(2)   # sentence may start with an entity
+            self.e(ent, LABEL_MAP[m.group(1)]); first, pos = False, m.end()
         rest = tpl[pos:]
         if rest: self.t(cap_first(rest) if (cap and first) else rest)
 
@@ -287,18 +323,23 @@ def build(seed, etype, severity, scen_idx, noise):
         text = text[0].upper() + text[1:]
         for e in b.ents:
             if e["start"] == 0: e["text"] = cap_first(e["text"])
-    return {"text": text, "entities": b.ents, "location_phrase": loc, "area": area,
+    return {"text": text, "entities": harmonize(text, b.ents), "location_phrase": loc, "area": area,
             "secondary_type": secondary[0] if secondary else None, "urgency_label": label,
             "urgency_score": score, "tag": rng.choice(EMOTION_TAGS[label]), "structure": struct, "place_kind": kind}
 
 
-def generate():
-    master = random.Random(BASE_SEED); rows, seen, counter = [], set(), 0
-    train_idx = [i for i, s in SPLIT_OF_IDX.items() if s == "train"]
-    val_idx = [i for i, s in SPLIT_OF_IDX.items() if s == "val"]
-    test_idx = [i for i, s in SPLIT_OF_IDX.items() if s == "test"]
+EXT_SPLIT_OF_IDX = {**{i: "train" for i in range(20, 34)}, 34: "val", 35: "val", 36: "val", 37: "test", 38: "test", 39: "test"}
+EXT_SPLIT_COUNTS = {"train": 1000, "val": 100, "test": 100}
+
+
+def generate(split_of_idx=SPLIT_OF_IDX, counts=SPLIT_COUNTS, seed_off=0, counter0=0, id_off=0):
+    """Defaults reproduce the original 8,000 rows exactly; the extension call uses new scenarios, seeds and ids."""
+    master = random.Random(BASE_SEED + seed_off); rows, seen, counter = [], set(), counter0
+    train_idx = [i for i, s in split_of_idx.items() if s == "train"]
+    val_idx = [i for i, s in split_of_idx.items() if s == "val"]
+    test_idx = [i for i, s in split_of_idx.items() if s == "test"]
     for etype in SCENARIOS:
-        splits = sum(([s] * n for s, n in SPLIT_COUNTS.items()), []); master.shuffle(splits)
+        splits = sum(([s] * n for s, n in counts.items()), []); master.shuffle(splits)
         for i, split in enumerate(splits, 1):
             severity = master.choices([s for s, _ in SEVERITY_WEIGHTS], weights=[w for _, w in SEVERITY_WEIGHTS])[0]
             scen_idx = master.choice({"train": train_idx, "val": val_idx, "test": test_idx}[split])
@@ -308,7 +349,7 @@ def generate():
                 if clean["text"] not in seen: seen.add(clean["text"]); break
             noisy = build(seed, etype, severity, scen_idx, True)
             rows.append({
-                "id": f"{etype}_{i:04d}", "city": "Sangli", "split": split, "emergency_type": etype,
+                "id": f"{etype}_{i + id_off:04d}", "city": "Sangli", "split": split, "emergency_type": etype,
                 "secondary_type": clean["secondary_type"], "severity_band": severity,
                 "urgency_label": clean["urgency_label"], "urgency_score": clean["urgency_score"],
                 "scenario_id": f"{etype}/{severity}/{scen_idx}", "place_kind": clean["place_kind"],
@@ -332,4 +373,4 @@ def save(rows):
 
 
 if __name__ == "__main__":
-    data = generate(); save(data); print(f"rows: {len(data)} -> {OUT_DIR}")
+    data = generate() + generate(EXT_SPLIT_OF_IDX, EXT_SPLIT_COUNTS, 7, 1_000_000, 2000); save(data); print(f"rows: {len(data)} -> {OUT_DIR}")
