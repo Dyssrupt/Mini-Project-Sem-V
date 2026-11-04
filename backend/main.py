@@ -17,7 +17,7 @@ from pydantic import BaseModel
 from .pipeline import Pipeline, ROOT, derive
 from .store import Store
 
-CLASSIFIER = os.getenv("CLASSIFIER", "tfidf"); CAUTIOUS = float(os.getenv("CAUTIOUS", "0")); WHISPER = os.getenv("WHISPER_MODEL", "small")
+CLASSIFIER = os.getenv("CLASSIFIER", "bert"); CAUTIOUS = float(os.getenv("CAUTIOUS", "0.75")); TAGGER = os.getenv("TAGGER", "combo"); WHISPER = os.getenv("WHISPER_MODEL", "small")
 state = {}
 tasks = set()          # keep references so background jobs aren't garbage-collected
 
@@ -42,8 +42,8 @@ hub = Hub()
 
 @asynccontextmanager
 async def lifespan(app):
-    state["pipe"] = Pipeline(classifier=CLASSIFIER, whisper_model=WHISPER); state["store"] = Store(ROOT / "incidents.db")
-    print(f"ready: classifier={CLASSIFIER} cautious={CAUTIOUS} whisper={WHISPER}")
+    state["pipe"] = Pipeline(classifier=CLASSIFIER, tagger=TAGGER, whisper_model=WHISPER); state["store"] = Store(ROOT / "incidents.db")
+    print(f"ready: classifier={CLASSIFIER} cautious={CAUTIOUS} tagger={TAGGER} whisper={WHISPER}")
     yield
 
 
@@ -82,7 +82,7 @@ class Patch(BaseModel):
 
 
 @app.get("/api/health")
-def health(): return {"ok": True, "classifier": CLASSIFIER, "cautious": CAUTIOUS, "whisper": WHISPER}
+def health(): return {"ok": True, "classifier": CLASSIFIER, "cautious": CAUTIOUS, "tagger": TAGGER, "whisper": WHISPER}
 
 
 @app.get("/api/incidents")
@@ -120,6 +120,27 @@ async def patch(iid: int, body: Patch):
     merged = derive({**cur, **upd}) if cur.get("type") else {**cur, **upd}
     new = store.update(iid, {**upd, **{k: merged[k] for k in ("final_type", "final_urgency", "priority", "dispatch") if k in merged}}, status=body.status)
     await push(iid); return new
+
+
+@app.delete("/api/incidents")
+@app.delete("/api/incidents/")
+@app.post("/api/incidents/clear")
+async def delete_all_incidents():
+    store = state["store"]
+    count = store.delete_all()
+    await hub.broadcast("all_incidents_deleted", {})
+    return {"deleted": True, "count": count}
+
+
+@app.delete("/api/incidents/{iid}")
+async def delete_incident(iid: int):
+    store = state["store"]
+    cur = store.get(iid)
+    if not cur:
+        raise HTTPException(404, "not found")
+    store.delete(iid)
+    await hub.broadcast("incident_deleted", {"id": iid})
+    return {"deleted": True, "id": iid}
 
 
 @app.post("/api/demo/replay")

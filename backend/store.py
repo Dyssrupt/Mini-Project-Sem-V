@@ -35,3 +35,15 @@ class Store:
             data = {**json.loads(r[0]), **patch}
             self.db.execute("UPDATE incidents SET data=?, status=COALESCE(?,status) WHERE id=?", (json.dumps(data), status, iid)); self.db.commit()
         return self.get(iid)
+
+    def delete(self, iid):
+        with self.lock:
+            cur = self.db.execute("DELETE FROM incidents WHERE id=?", (iid,))
+            self.db.commit()
+            return cur.rowcount > 0
+
+    def delete_all(self):
+        with self.lock:
+            cur = self.db.execute("DELETE FROM incidents")
+            self.db.commit()
+            return cur.rowcount

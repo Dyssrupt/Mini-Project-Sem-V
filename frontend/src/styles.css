@@ -27,6 +27,17 @@ mark { padding: 1px 3px; border-radius: 3px; }
 .bar-label { width: 62px; text-transform: capitalize; } .bar-track { flex: 1; height: 10px; background: #e3e8ec; border-radius: 5px; overflow: hidden; } .bar-fill { height: 100%; } .bar-pct { width: 36px; text-align: right; color: #607d8b; }
 button { padding: 7px 14px; border: 1px solid #b0bec5; background: #fff; border-radius: 6px; cursor: pointer; font-size: 14px; } button:hover:not(:disabled) { background: #f0f3f6; } button:disabled { opacity: .5; cursor: default; }
 button.primary { background: #3f51b5; color: #fff; border-color: #3f51b5; } button.primary:hover:not(:disabled) { background: #3949a3; }
+button.danger { background: #fff; color: #c62828; border-color: #ef9a9a; font-weight: 500; }
+button.danger:hover:not(:disabled) { background: #ffebee; border-color: #e57373; }
+.card-del-btn { background: transparent; border: none; color: #90a4ae; font-size: 14px; padding: 2px 6px; border-radius: 4px; cursor: pointer; line-height: 1; }
+.card-del-btn:hover { background: #ffebee; color: #c62828; }
+.non-emergency-alert { display: flex; align-items: flex-start; gap: 12px; background: #eceff1; border-left: 5px solid #607d8b; padding: 12px 14px; border-radius: 6px; margin-bottom: 14px; color: #263238; }
+.non-emergency-alert .alert-icon { font-size: 22px; }
+.non-emergency-alert strong { color: #37474f; font-size: 14px; display: block; margin-bottom: 2px; }
+.non-emergency-alert p { margin: 0; font-size: 13px; color: #546e7a; }
+.non-emg-box { background: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 12px; text-align: center; }
+.queue-header { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafbfc; border-bottom: 1px solid #eef1f4; font-size: 13px; font-weight: 600; color: #546e7a; }
+.queue-del-all { padding: 3px 8px; font-size: 11px; }
 select, textarea { font: inherit; padding: 6px; border: 1px solid #b0bec5; border-radius: 6px; width: 100%; } label { font-size: 13px; display: flex; align-items: center; gap: 6px; } label select { width: auto; }
 .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; } .dot.on { background: #2e7d32; } .dot.off { background: #c62828; }
 .disclaimer { margin-top: 22px; font-size: 12px; color: #78909c; border-top: 1px solid #dde3ea; padding-top: 10px; }

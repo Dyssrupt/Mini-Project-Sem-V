@@ -23,7 +23,7 @@ def transcribe(path, model="small"):
 def main():
     ap = argparse.ArgumentParser()
     src = ap.add_mutually_exclusive_group(required=True); src.add_argument("--text"); src.add_argument("--audio")
-    ap.add_argument("--tagger", default="rule", choices=["rule", "spacy", "hybrid", "combo"]); ap.add_argument("--model", default=str(HERE / "models" / "sangli_ner"))
+    ap.add_argument("--tagger", default="combo", choices=["rule", "spacy", "hybrid", "combo"]); ap.add_argument("--model", default=str(HERE / "models" / "sangli_ner"))
     ap.add_argument("--whisper", default="small"); ap.add_argument("--data", default=str(HERE / "output_v3"))
     a = ap.parse_args()
     gaz, tagger = E.build_tagger(a.tagger, a.model, E.load(a.data)); ext = S.IncidentExtractor(tagger, gaz)

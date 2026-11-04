@@ -3,6 +3,7 @@
 Put `backend/` and `frontend/` inside your project folder (next to `sangli_nlp.py`, `output_v3/`, `transcribe.py`, ...).
 
 ## Run (two terminals, from the project folder)
+    source .venv/bin/activate
     pip install fastapi "uvicorn[standard]" python-multipart
     uvicorn backend.main:app --port 8000
 
@@ -17,8 +18,14 @@ Production-style (one port): `cd frontend && npm run build`, then just run uvico
 2. Upload one of your recorded clips (audio_out/*.mp3): Whisper (prompt + VAD) -> NER -> classifier.
 3. Paste any transcript into the box.
 
-## Options (environment variables)
-    CLASSIFIER=bert     use the fine-tuned DistilBERT (needs models/bert_cls from classify_bert.py + torch)
-    CAUTIOUS=0.75       raise urgency when unsure (cuts missed high/critical calls, many more false alarms)
-    WHISPER_MODEL=small
-First start takes ~20 s (trains and caches the TF-IDF classifier in models/tfidf_cls.pkl). Incidents are stored in incidents.db (SQLite).
+## Active Defaults & Options (environment variables)
+Defaults are configured to use the highest-accuracy stack:
+    CLASSIFIER=bert     (default: bert) fine-tuned DistilBERT (99.8% type accuracy)
+    CAUTIOUS=0.75       (default: 0.75) cuts missed high/critical calls to ~8%
+    TAGGER=combo        (default: combo) hybrid rules + spaCy victim disambiguation (100% precision)
+    WHISPER_MODEL=small (default: small)
+
+To switch to the lightweight baseline on low-spec hardware:
+    CLASSIFIER=tfidf CAUTIOUS=0 TAGGER=rule uvicorn backend.main:app --port 8000
+
+Incidents are stored in incidents.db (SQLite).

@@ -136,6 +136,20 @@ LOC_PREP_RE = re.compile(r"(?:near|at|opposite|behind|outside|beside|by|to|from|
 TOKEN_RE = re.compile(r"[A-Za-z][A-Za-z'\-]*|\d+")
 STOP_START = set("please sir yes hello oh it we the a an i there this my our near at on in opposite behind next front under outside also come send kindly thank someone nobody people uh um okay listen wait help hurry".split())
 
+# Universal emergency symptom & dispatch phrases to complement synthetic training lexicon
+COMMON_EMERGENCY_RE = [
+    # Breathing and respiratory distress variations
+    re.compile(r'\b((?:not\s+(?:able\s+to\s+)?|unable\s+to\s+|can\'?t\s+|cannot\s+|hard\s+to\s+|trouble\s+|difficulty\s+(?:in\s+)?|struggling\s+to\s+|stopped\s+|shortness\s+of\s+)breath(?:e|ing)?(?:\s+properly)?|breathlessness|gasping(?:\s+for\s+breath)?|choking|suffocating|wheezing)\b', re.I),
+    # Consciousness and responsiveness
+    re.compile(r'\b(unconscious|unresponsive|not\s+(?:responding|waking\s+up|moving)|passed\s+out|blacked\s+out|fainted|loss\s+of\s+consciousness|collapsed)\b', re.I),
+    # Cardiac and chest emergencies
+    re.compile(r'\b(chest\s+pain|heart\s+attack|cardiac\s+arrest|no\s+pulse|heart\s+stopped)\b', re.I),
+    # Severe bleeding, trauma, and fractures
+    re.compile(r'\b(bleeding(?:\s+heavily)?|losing\s+blood|pool\s+of\s+blood|head\s+injury|fracture|broken\s+(?:bone|leg|arm|hip)|internal\s+bleeding)\b', re.I),
+    # Universal calls for emergency assistance
+    re.compile(r'\b(emergency|medical\s+emergency|send\s+(?:help|an?\s+ambulance|the\s+police|the\s+fire\s+brigade)|need\s+(?:urgent\s+)?help)\b', re.I),
+]
+
 
 class RuleTagger:
     """Closed-vocabulary tagger: keyword lexicon (from TRAIN) + regexes + fuzzy gazetteer windows."""
@@ -184,6 +198,8 @@ class RuleTagger:
             put(a, b, label)
         for m in TIME_RE.finditer(text): put(m.start(), m.end(), "TIME_REF")
         for m in COUNT_RE.finditer(text): put(m.start(), m.end(), "VICTIM_COUNT")
+        for rx in COMMON_EMERGENCY_RE:
+            for m in rx.finditer(text): put(m.start(), m.end(), "EMERGENCY_KEYWORD")
         if self.kw_re:
             for m in self.kw_re.finditer(text): put(m.start(), m.end(), "EMERGENCY_KEYWORD")
         return sorted(spans)
@@ -214,15 +230,16 @@ class HybridTagger:
 
 class ComboTagger:
     """Rules for everything a closed vocabulary covers (places, building, time, known keywords: they are precise and
-    never hallucinate); the trained model only for VICTIM_COUNT, where context decides victim vs bystander."""
+    never hallucinate); the trained model for VICTIM_COUNT and model-generalized EMERGENCY_KEYWORD spans."""
 
-    def __init__(self, model_tagger, rule_tagger, model_labels=("VICTIM_COUNT",)):
+    def __init__(self, model_tagger, rule_tagger, model_labels=("VICTIM_COUNT", "EMERGENCY_KEYWORD")):
         self.m, self.r, self.ml = model_tagger, rule_tagger, set(model_labels)
 
     def tag(self, text):
-        spans = [s for s in self.r.tag(text) if s[2] not in self.ml]
+        spans = list(self.r.tag(text))
+        def free(a, b): return all(b <= x or a >= y for x, y, _ in spans)
         for a, b, l in self.m.tag(text):
-            if l in self.ml and all(b <= x or a >= y for x, y, _ in spans): spans.append((a, b, l))
+            if l in self.ml and free(a, b): spans.append((a, b, l))
         return sorted(spans)
 
 
